@@ -1,0 +1,112 @@
+Script started on Sat Sep 21 13:10:09 2019
+u306024@imac-210[31]: cat kadai1-b-2.c
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+{
+    FILE *fp;
+    int c,count=0,i;
+    unsigned char ary[100];
+    /*---ファイル・オープン(読み込み用) ---*/
+    fp=fopen("test.bmp","rb");
+    if (fp==NULL){
+        printf("読み込み用ファイルをオープンできません．\n");
+        exit (1);
+    }
+    printf("読み込み用ファイルをオープンしました．\n");
+    /*---ファイルから1バイトずつ読み込みディスプレイに表示---*/
+    c=fgetc(fp);
+    while (c!=EOF) {
+        ary[count]=c;
+        c=fgetc(fp);
+        count++;
+    }
+    /*--- ファイル・クローズ(読み込み用) ---*/
+    fclose(fp);
+    printf("%d個のデータを読み込み、配列に格納しました.\n",count);
+    printf("読み込み用ファイルをクローズしました．\n");
+
+    //ここまで読み込み
+
+    printf("\n配列の内容を表示します.\n");
+    for (i=0; i<count ; i++) {
+        printf("ary[%d]=%d\n",i,ary[i]);
+    }
+
+    //ここから書き出し
+
+    /*---ファイル・オープン(書き出し用) ---*/
+    fp=fopen("testcp.bmp","wb");
+    if (fp==NULL){
+        printf("\n書き出し用ファイルをオープンできません．\n");
+        exit (1);
+    }
+    printf("\n書き出し用ファイルをオープンしました．\n");
+
+    printf("配列に格納されていた%d個のデータを書き出しました.",count);
+
+    /*---ファイルに1バイトずつ書き出し---*/
+    for (i=0;i<count;i++){
+
+        fputc(ary[i],fp);
+    }
+    /*--- ファイル・クローズ(書き出し用) ---*/
+    fclose(fp);
+    printf("\n書き出し用ファイルをクローズしました．\n");
+    return (0);
+}u306024@imac-210[32]: gcc kadai1-b-2.c
+u306024@imac-210[33]: a.out
+読み込み用ファイルをオープンしました．
+5個のデータを読み込み、配列に格納しました.
+読み込み用ファイルをクローズしました．
+
+配列の内容を表示します.
+ary[0]=50
+ary[1]=100
+ary[2]=150
+ary[3]=200
+ary[4]=250
+
+書き出し用ファイルをオープンしました．
+配列に格納されていた5個のデータを書き出しました.
+書き出し用ファイルをクローズしました．
+u306024@imac-210[34]: cat kadai1-a-cp.c
+#include <stdio.h>
+#include <stdlib.h>
+int main(void){
+  FILE *fp;
+  int c,count=0;
+  /*---ファイル・オープン(読み込み用) ---*/
+  fp=fopen("testcp.bmp","rb");
+  if (fp==NULL){
+    printf("ファイルをオープンできません．\n");
+    exit (1);
+  }
+  printf("ファイルをオープンしました．\n");
+  /*---ファイルから1バイトずつ読み込みディスプレイに表示---*/
+  c=fgetc(fp);
+  while (c!=EOF) {
+    printf("%3d\n",c);
+    c=fgetc(fp);
+      count++;
+  }
+  /*--- ファイル・クローズ(読み込み用) ---*/
+  fclose(fp);
+    printf("全部で%dバイト読み込みました。\n",count);
+  printf("ファイルをクローズしました．\n");
+  return (0);
+}
+u306024@imac-210[35]: gcc kadai1-a-cp.c
+u306024@imac-210[36]: a.out
+ファイルをオープンしました．
+ 50
+100
+150
+200
+250
+全部で5バイト読み込みました。
+ファイルをクローズしました．
+u306024@imac-210[37]: exit
+exit
+
+Script done on Sat Sep 21 13:11:39 2019

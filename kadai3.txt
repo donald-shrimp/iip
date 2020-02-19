@@ -1,0 +1,235 @@
+Script started on Sat Oct  5 13:54:12 2019
+u306024@imac-205[31]: cat kadai3-b-1.c
+#include <stdio.h>
+#include <stdlib.h>
+void get_data(void);
+unsigned char header[54];
+
+int main(void)
+{
+  get_data();
+  return 0;
+}
+
+void get_data(void)
+{
+  FILE *fp;
+  int count = 0, i = 0;
+  char filename[100];
+  int filesize;
+  int offset, width, height, bits;
+  //unsignd char tmp[];
+  /*---ファイル・オープン(読み込み用) ---*/
+  printf("ファイル名を入力してください：");
+  scanf("%s", filename);
+  fp = fopen(filename, "rb");
+  if (fp == NULL)
+  {
+    printf("ファイルをオープンできません．\n");
+    exit(1);
+  }
+  printf("ファイルをオープンしました．\n");
+
+  /*---ファイルから1バイトずつ読み込む---*/
+
+  while (count < 54)
+  {
+    header[count] = fgetc(fp);
+    count++;
+  }
+  //結果を出力するよ
+  printf("\n＜ファイルタイプ＞\n");
+  while (i < 2)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  printf("\n");
+
+  printf("\n＜ファイルサイズ＞\n");
+  while (i < 6)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  filesize = *(int *)&header[2];
+  printf("\n%dバイト\n", filesize);
+
+  printf("\n＜予約領域＞\n");
+  while (i < 10)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  printf("\n");
+
+  printf("\n＜オフセット＞\n");
+  while (i < 14)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  offset = *(int *)&header[10];
+  printf("\n%dバイト\n", offset);
+
+  printf("\n＜情報ヘッダサイズ＞\n");
+  while (i < 18)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  printf("\n");
+
+  printf("\n＜画像の幅＞\n");
+  while (i < 22)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  width = *(int *)&header[18];
+  printf("\n%d画素\n", width);
+
+  printf("\n＜画像の高さ＞\n");
+  while (i < 26)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  height = *(int *)&header[22];
+  printf("\n%dライン\n", height);
+
+  printf("\n＜色プレーン数＞\n");
+  while (i < 28)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  printf("\n");
+
+  printf("\n＜１画素当たりのビット数＞\n");
+  while (i < 30)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  bits = *(int *)&header[28];
+  printf("\n%dビット\n", bits);
+
+  printf("\n＜圧縮方式＞\n");
+  while (i < 34)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  printf("\n");
+
+  printf("\n＜画像データサイズ＞\n");
+  while (i < 38)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  printf("\n");
+
+  printf("\n＜水平解像度＞\n");
+  while (i < 42)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  printf("\n");
+
+  printf("\n＜垂直解像度＞\n");
+  while (i < 46)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  printf("\n");
+
+  printf("\n＜色数＞\n");
+  while (i < 50)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  printf("\n");
+
+  printf("\n＜重要な色数＞\n");
+  while (i < 54)
+  {
+    printf("header[%d]=%02x ", i, header[i]);
+    i++;
+  }
+  printf("\n");
+
+  printf("\n＜挿入ビット数＞\n");
+
+  printf("%dバイト\n", filesize - offset - width * height * (bits / 8));
+
+  /*--- ファイル・クローズ(読み込み用) ---*/
+  fclose(fp);
+  printf("ファイルをクローズしました．\n");
+}
+u306024@imac-205[32]: gcc kadai3-b-1.c
+u306024@imac-205[33]: a.out
+ファイル名を入力してください：lenna.bmp
+ファイルをオープンしました．
+
+＜ファイルタイプ＞
+header[0]=42 header[1]=4d 
+
+＜ファイルサイズ＞
+header[2]=38 header[3]=00 header[4]=0c header[5]=00 
+786488バイト
+
+＜予約領域＞
+header[6]=00 header[7]=00 header[8]=00 header[9]=00 
+
+＜オフセット＞
+header[10]=36 header[11]=00 header[12]=00 header[13]=00 
+54バイト
+
+＜情報ヘッダサイズ＞
+header[14]=28 header[15]=00 header[16]=00 header[17]=00 
+
+＜画像の幅＞
+header[18]=00 header[19]=02 header[20]=00 header[21]=00 
+512画素
+
+＜画像の高さ＞
+header[22]=00 header[23]=02 header[24]=00 header[25]=00 
+512ライン
+
+＜色プレーン数＞
+header[26]=01 header[27]=00 
+
+＜１画素当たりのビット数＞
+header[28]=18 header[29]=00 
+24ビット
+
+＜圧縮方式＞
+header[30]=00 header[31]=00 header[32]=00 header[33]=00 
+
+＜画像データサイズ＞
+header[34]=00 header[35]=00 header[36]=00 header[37]=00 
+
+＜水平解像度＞
+header[38]=12 header[39]=0b header[40]=00 header[41]=00 
+
+＜垂直解像度＞
+header[42]=12 header[43]=0b header[44]=00 header[45]=00 
+
+＜色数＞
+header[46]=00 header[47]=00 header[48]=00 header[49]=00 
+
+＜重要な色数＞
+header[50]=00 header[51]=00 header[52]=00 header[53]=00 
+
+＜挿入ビット数＞
+2バイト
+ファイルをクローズしました．
+u306024@imac-205[34]: exit
+exit
+
+Script done on Sat Oct  5 13:55:22 2019

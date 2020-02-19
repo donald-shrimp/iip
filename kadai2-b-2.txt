@@ -1,0 +1,97 @@
+Script started on Fri Sep 27 12:33:18 2019
+u306024@imac-118[31]: cat kadai2-b-2.c
+#include <stdio.h>
+#include <stdlib.h>
+int main(void)
+{
+    FILE *fp;
+    int c,count=0,i;
+    unsigned char ary[100];
+    char filename[100],filenamecp[100];
+    //名前を聞く
+    printf("コピー元のファイル名を入力してください：");
+    scanf("%s",filename);
+    printf("コピー先のファイル名を入力してください：");
+    scanf("%s",filenamecp);
+    /*---ファイル・オープン(読み込み用) ---*/
+    fp=fopen(filename,"rb");
+    if (fp==NULL){
+        printf("読み込み用ファイルをオープンできません．\n");
+        exit (1);
+    }
+    printf("読み込み用ファイルをオープンしました．\n");
+    /*---ファイルから1バイトずつ読み込みディスプレイに表示---*/
+    c=fgetc(fp);
+    while (c!=EOF) {
+        ary[count]=c;
+        c=fgetc(fp);
+        count++;
+    }
+    /*--- ファイル・クローズ(読み込み用) ---*/
+    fclose(fp);
+    printf("%d個のデータを読み込み、配列に格納しました.\n",count);
+    printf("読み込み用ファイルをクローズしました．\n");
+
+    //ここまで読み込み
+
+    printf("\n配列の内容を表示します.\n");
+    for (i=0; i<count ; i++) {
+        printf("ary[%d]=%d\n",i,ary[i]);
+    }
+
+    //ここから書き出し
+
+    /*---ファイル・オープン(書き出し用) ---*/
+    fp=fopen(filenamecp,"wb");
+    if (fp==NULL){
+        printf("\n書き出し用ファイルをオープンできません．\n");
+        exit (1);
+    }
+    printf("\n書き出し用ファイルをオープンしました．\n");
+
+    printf("配列に格納されていた%d個のデータを書き出しました.",count);
+
+    /*---ファイルに1バイトずつ書き出し---*/
+    for (i=0;i<count;i++){
+
+        fputc(ary[i],fp);
+    }
+    /*--- ファイル・クローズ(書き出し用) ---*/
+    fclose(fp);
+    printf("\n書き出し用ファイルをクローズしました．\n");
+    return (0);
+}u306024@imac-118[32]: gcc kadai2-b-2.c
+u306024@imac-118[33]: a.out
+コピー元のファイル名を入力してください：test.bmp
+コピー先のファイル名を入力してください：test2.bmp
+読み込み用ファイルをオープンしました．
+6個のデータを読み込み、配列に格納しました.
+読み込み用ファイルをクローズしました．
+
+配列の内容を表示します.
+ary[0]=1
+ary[1]=2
+ary[2]=4
+ary[3]=3
+ary[4]=6
+ary[5]=5
+
+書き出し用ファイルをオープンしました．
+配列に格納されていた6個のデータを書き出しました.
+書き出し用ファイルをクローズしました．
+u306024@imac-118[34]: gcc kadai2-a-1.c
+u306024@imac-118[35]: a.out
+ファイル名を入力してください：test2.bmp
+ファイルをオープンしました．
+  1
+  2
+  4
+  3
+  6
+  5
+全部で6バイト読み込みました。
+ファイルをクローズしました．
+u306024@imac-118[36]: exit
+exit
+
+Script done on Fri Sep 27 12:34:51 2019
